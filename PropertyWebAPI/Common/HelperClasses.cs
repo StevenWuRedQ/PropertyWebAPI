@@ -72,6 +72,7 @@ namespace PropertyWebAPI.Common
                 cfg.CreateMap<tfnReliefSoughtDecision5NSForLawFirmAndJudge_Result, DAL.ReliefSoughtDecision5NumberSummaryPlus>();
                 cfg.CreateMap<tfnCaseCompletionDecision5NSForLawFirmAndJudge_Result, DAL.CaseCompletionDecision5NumberSummaryPlus>();
                 cfg.CreateMap<tfnGetCompletedCasesForRelatedFirmsForAttorneyOfRecord_Result, DAL.FirmCompletedCaseDetail>();
+               
             });
         }
     }

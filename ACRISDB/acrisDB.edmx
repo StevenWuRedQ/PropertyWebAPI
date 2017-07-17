@@ -176,6 +176,27 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
           <Property Name="PercentageOftransaction" Type="numeric" Precision="15" Scale="6" />
           <Property Name="DateLastUpdated" Type="datetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AreaAbstractNew.Acris.vwUpdateTrancation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwUpdateTrancation">
+          <Key>
+            <PropertyRef Name="BBL" />
+            <PropertyRef Name="IsInsert" />
+            <PropertyRef Name="IsDelete" />
+            <PropertyRef Name="IsUpdate" />
+            <PropertyRef Name="DateTimeProcessed" />
+            <PropertyRef Name="IdentifyingColumnName" />
+            <PropertyRef Name="TableName" />
+          </Key>
+          <Property Name="BBL" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="IsInsert" Type="smallint" Nullable="false" />
+          <Property Name="IsDelete" Type="smallint" Nullable="false" />
+          <Property Name="IsUpdate" Type="smallint" Nullable="false" />
+          <Property Name="TransactionDateTime" Type="datetime" />
+          <Property Name="DateTimeProcessed" Type="datetime" Nullable="false" />
+          <Property Name="IdentifyingColumnName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="TableName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <Function Name="tfnGetDocumentParties" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="Acris">
           <Parameter Name="UniqueKey" Type="varchar" Mode="In" />
           <Parameter Name="PartyType" Type="varchar" Mode="In" />
@@ -399,6 +420,18 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
     [vwMortgageDeedMaster].[DateLastUpdated] AS [DateLastUpdated]
     FROM [Acris].[vwMortgageDeedMaster] AS [vwMortgageDeedMaster]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="vwUpdateTrancation" EntityType="Self.vwUpdateTrancation" store:Type="Views" store:Schema="Acris">
+            <DefiningQuery>SELECT 
+    [vwUpdateTrancation].[BBL] AS [BBL], 
+    [vwUpdateTrancation].[IsInsert] AS [IsInsert], 
+    [vwUpdateTrancation].[IsDelete] AS [IsDelete], 
+    [vwUpdateTrancation].[IsUpdate] AS [IsUpdate], 
+    [vwUpdateTrancation].[TransactionDateTime] AS [TransactionDateTime], 
+    [vwUpdateTrancation].[DateTimeProcessed] AS [DateTimeProcessed], 
+    [vwUpdateTrancation].[IdentifyingColumnName] AS [IdentifyingColumnName], 
+    [vwUpdateTrancation].[TableName] AS [TableName]
+    FROM [Acris].[vwUpdateTrancation] AS [vwUpdateTrancation]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -551,25 +584,6 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
           <Property Name="ReelNumber" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="ReelPage" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="vwMortgageDeedMaster">
-          <Key>
-            <PropertyRef Name="UniqueKey" />
-          </Key>
-          <Property Name="UniqueKey" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DateFileCreated" Type="DateTime" Precision="0" />
-          <Property Name="CRFN" Type="String" MaxLength="13" FixedLength="false" Unicode="false" />
-          <Property Name="RecordedBorough" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="DocumentTypeCode" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
-          <Property Name="DocumentAmount" Type="Decimal" Precision="14" Scale="2" />
-          <Property Name="DateRecorded" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <Property Name="ReelYear" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="ReelNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="ReelPage" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="PercentageOftransaction" Type="Decimal" Precision="15" Scale="6" />
-          <Property Name="DateLastUpdated" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityContainer Name="ACRISEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="LatestContractOfSaleorMemorandumofContracts" EntityType="Self.LatestContractOfSaleorMemorandumofContract" />
           <EntitySet Name="LatestDeedDocuments" EntityType="Self.LatestDeedDocument" />
@@ -577,7 +591,6 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
           <EntitySet Name="vwDocumentPartiesByBBLEs" EntityType="Self.vwDocumentPartiesByBBLE" />
           <EntitySet Name="vwDocumentPartiesByUniqueKeys" EntityType="Self.vwDocumentPartiesByUniqueKey" />
           <EntitySet Name="vwDocumentsByBBLEs" EntityType="Self.vwDocumentsByBBLE" />
-          <EntitySet Name="vwMortgageDeedMasters" EntityType="Self.vwMortgageDeedMaster" />
           <FunctionImport Name="tfnGetDocumentParties" IsComposable="true" ReturnType="Collection(ACRISModel.tfnGetDocumentParties_Result)">
             <Parameter Name="UniqueKey" Mode="In" Type="String" />
             <Parameter Name="PartyType" Mode="In" Type="String" />
@@ -592,11 +605,13 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
             <Parameter Name="DocumentType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="tfnGetMortgageChain" IsComposable="true" ReturnType="Collection(ACRISModel.tfnGetMortgageChain_Result)">
-            <Parameter Name="BBLE" Mode="In" Type="String" />
+          <Parameter Name="BBLE" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="tfnGetUnsatisfiedMortgages" IsComposable="true" ReturnType="Collection(ACRISModel.tfnGetUnsatisfiedMortgages_Result)">
-            <Parameter Name="BBLE" Mode="In" Type="String" />
+          <Parameter Name="BBLE" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="vwUpdateTrancations" EntityType="ACRISModel.vwUpdateTrancation" />
+          <EntitySet Name="vwMortgageDeedMasters" EntityType="ACRISModel.vwMortgageDeedMaster" />
         </EntityContainer>
         <EntityType Name="PropertyNotInAssessment">
           <Key>
@@ -688,6 +703,44 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
           <Property Type="String" Name="ReelNumber" Nullable="true" MaxLength="5" />
           <Property Type="String" Name="ReelPage" Nullable="true" MaxLength="5" />
         </ComplexType>
+        <EntityType Name="vwUpdateTrancation">
+          <Key>
+            <PropertyRef Name="BBL" />
+            <PropertyRef Name="IsInsert" />
+            <PropertyRef Name="IsDelete" />
+            <PropertyRef Name="IsUpdate" />
+            <PropertyRef Name="DateTimeProcessed" />
+            <PropertyRef Name="IdentifyingColumnName" />
+            <PropertyRef Name="TableName" />
+          </Key>
+          <Property Name="BBL" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="IsInsert" Type="Int16" Nullable="false" />
+          <Property Name="IsDelete" Type="Int16" Nullable="false" />
+          <Property Name="IsUpdate" Type="Int16" Nullable="false" />
+          <Property Name="TransactionDateTime" Type="DateTime" Precision="3" />
+          <Property Name="DateTimeProcessed" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdentifyingColumnName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TableName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="vwMortgageDeedMaster">
+          <Key>
+            <PropertyRef Name="UniqueKey" />
+          </Key>
+          <Property Name="UniqueKey" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="DateFileCreated" Type="DateTime" Precision="0" />
+          <Property Name="CRFN" Type="String" MaxLength="13" FixedLength="false" Unicode="false" />
+          <Property Name="RecordedBorough" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="DocumentTypeCode" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
+          <Property Name="DocumentAmount" Type="Decimal" Precision="14" Scale="2" />
+          <Property Name="DateRecorded" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <Property Name="ReelYear" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ReelNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ReelPage" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PercentageOftransaction" Type="Decimal" Precision="15" Scale="6" />
+          <Property Name="DateLastUpdated" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -811,26 +864,6 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
                 <ScalarProperty Name="ReelYear" ColumnName="ReelYear" />
                 <ScalarProperty Name="ReelNumber" ColumnName="ReelNumber" />
                 <ScalarProperty Name="ReelPage" ColumnName="ReelPage" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vwMortgageDeedMasters">
-            <EntityTypeMapping TypeName="ACRISModel.vwMortgageDeedMaster">
-              <MappingFragment StoreEntitySet="vwMortgageDeedMaster">
-                <ScalarProperty Name="UniqueKey" ColumnName="UniqueKey" />
-                <ScalarProperty Name="DateFileCreated" ColumnName="DateFileCreated" />
-                <ScalarProperty Name="CRFN" ColumnName="CRFN" />
-                <ScalarProperty Name="RecordedBorough" ColumnName="RecordedBorough" />
-                <ScalarProperty Name="DocumentTypeCode" ColumnName="DocumentTypeCode" />
-                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
-                <ScalarProperty Name="DocumentAmount" ColumnName="DocumentAmount" />
-                <ScalarProperty Name="DateRecorded" ColumnName="DateRecorded" />
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="ReelYear" ColumnName="ReelYear" />
-                <ScalarProperty Name="ReelNumber" ColumnName="ReelNumber" />
-                <ScalarProperty Name="ReelPage" ColumnName="ReelPage" />
-                <ScalarProperty Name="PercentageOftransaction" ColumnName="PercentageOftransaction" />
-                <ScalarProperty Name="DateLastUpdated" ColumnName="DateLastUpdated" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -970,7 +1003,41 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="vwUpdateTrancations">
+            <EntityTypeMapping TypeName="ACRISModel.vwUpdateTrancation">
+              <MappingFragment StoreEntitySet="vwUpdateTrancation">
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="IdentifyingColumnName" ColumnName="IdentifyingColumnName" />
+                <ScalarProperty Name="DateTimeProcessed" ColumnName="DateTimeProcessed" />
+                <ScalarProperty Name="TransactionDateTime" ColumnName="TransactionDateTime" />
+                <ScalarProperty Name="IsUpdate" ColumnName="IsUpdate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsInsert" ColumnName="IsInsert" />
+                <ScalarProperty Name="BBL" ColumnName="BBL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwMortgageDeedMasters">
+            <EntityTypeMapping TypeName="ACRISModel.vwMortgageDeedMaster">
+              <MappingFragment StoreEntitySet="vwMortgageDeedMaster">
+                <ScalarProperty Name="DateLastUpdated" ColumnName="DateLastUpdated" />
+                <ScalarProperty Name="PercentageOftransaction" ColumnName="PercentageOftransaction" />
+                <ScalarProperty Name="ReelPage" ColumnName="ReelPage" />
+                <ScalarProperty Name="ReelNumber" ColumnName="ReelNumber" />
+                <ScalarProperty Name="ReelYear" ColumnName="ReelYear" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateRecorded" ColumnName="DateRecorded" />
+                <ScalarProperty Name="DocumentAmount" ColumnName="DocumentAmount" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="DocumentTypeCode" ColumnName="DocumentTypeCode" />
+                <ScalarProperty Name="RecordedBorough" ColumnName="RecordedBorough" />
+                <ScalarProperty Name="CRFN" ColumnName="CRFN" />
+                <ScalarProperty Name="DateFileCreated" ColumnName="DateFileCreated" />
+                <ScalarProperty Name="UniqueKey" ColumnName="UniqueKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

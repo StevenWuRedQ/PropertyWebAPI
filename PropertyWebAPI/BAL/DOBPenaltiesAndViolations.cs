@@ -24,7 +24,7 @@ namespace PropertyWebAPI.BAL
     /// <summary>
     /// Helper class used to capture DOB Civil Penalties detail and used for serialization into JSON object 
     /// </summary>
-    public class DOBPenaltiesAndViolationsSummaryData: NYCBaseResult
+    public class DOBPenaltiesAndViolationsSummaryData : NYCBaseResult
     {
         /// <summary>
         /// Sum total of all Civil Penalties due
@@ -37,7 +37,7 @@ namespace PropertyWebAPI.BAL
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public decimal? violationAmount;
     }
-       
+
     #endregion
 
     /// <summary>
@@ -53,7 +53,8 @@ namespace PropertyWebAPI.BAL
         /// </summary>
         [DataContract]
         class Parameters
-        {   [DataMember]
+        {
+            [DataMember]
             public string BBL;
         }
 
@@ -82,7 +83,10 @@ namespace PropertyWebAPI.BAL
         /// <summary>
         ///     This method calls back portal for every log record in the list
         /// </summary>
-        private static void MakeCallBacks(Common.Context appContext, List<DataRequestLog> logs, decimal? penaltyAmount, decimal? violationAmount)
+        private static void MakeCallBacks(Common.Context appContext,
+                                        List<DataRequestLog> logs,
+                                        decimal? penaltyAmount,
+                                        decimal? violationAmount)
         {
             if (!CallingSystem.isAnyCallBack(appContext))
                 return;
@@ -119,7 +123,7 @@ namespace PropertyWebAPI.BAL
         {
             return Get(propertyBBL, externalReferenceId, DAL.Request.MEDIUMPRIORITY, null);
         }
-        
+
         /// <summary>
         ///     This method deals with all the details associated with either returning the DOB Penalties and Violations details or creating the 
         ///     request for getting it scrapped from the web 
@@ -151,7 +155,7 @@ namespace PropertyWebAPI.BAL
                             dPenaltiesAndViolations.violationAmount = dobViolationObj.ECBViolationAmount;
                             dPenaltiesAndViolations.status = RequestStatus.Success.ToString();
 
-                            DAL.DataRequestLog.InsertForCacheAccess(webDBEntities, propertyBBL, RequestTypeId , externalReferenceId, jobId, parameters);
+                            DAL.DataRequestLog.InsertForCacheAccess(webDBEntities, propertyBBL, RequestTypeId, externalReferenceId, jobId, parameters);
                         }
                         else
                         {   //check if pending request in queue
@@ -185,7 +189,7 @@ namespace PropertyWebAPI.BAL
                         webDBEntitiestransaction.Rollback();
                         dPenaltiesAndViolations.status = RequestStatus.Error.ToString();
                         DAL.DataRequestLog.InsertForFailure(propertyBBL, RequestTypeId, externalReferenceId, jobId, parameters);
-                        Common.Logs.log().Error(string.Format("Exception encountered processing {0} with externalRefId {1}{2}", 
+                        Common.Logs.log().Error(string.Format("Exception encountered processing {0} with externalRefId {1}{2}",
                                                 propertyBBL, externalReferenceId, Common.Logs.FormatException(e)));
                     }
                 }
@@ -232,7 +236,7 @@ namespace PropertyWebAPI.BAL
             }
             catch (Exception e)
             {
-                Common.Logs.log().Error(string.Format("Exception encountered processing request log for {0} with externalRefId {1}{2}", 
+                Common.Logs.log().Error(string.Format("Exception encountered processing request log for {0} with externalRefId {1}{2}",
                                                        dataRequestLogObj.BBL, dataRequestLogObj.ExternalReferenceId, Common.Logs.FormatException(e)));
                 return null;
             }
@@ -255,7 +259,7 @@ namespace PropertyWebAPI.BAL
                         switch (requestObj.RequestStatusTypeId)
                         {
                             case (int)RequestStatus.Error:
-                                logs=DAL.DataRequestLog.SetAsError(webDBEntities, requestObj.RequestId);
+                                logs = DAL.DataRequestLog.SetAsError(webDBEntities, requestObj.RequestId);
                                 break;
                             case (int)RequestStatus.Success:
                                 {
@@ -278,7 +282,7 @@ namespace PropertyWebAPI.BAL
                                         //check if data available
                                         WebDataDB.DOBViolation dobPenaltiesAndViolationsObj = webDBEntities.DOBViolations.FirstOrDefault(i => i.BBL == parameters.BBL);
                                         if (dobPenaltiesAndViolationsObj != null)
-                                        {   
+                                        {
                                             dobPenaltiesAndViolationsObj.DOBCivilPenalties = dobTotalPenaltyAmount;
                                             dobPenaltiesAndViolationsObj.ECBViolationAmount = dobTotalViolationAmount;
                                             dobPenaltiesAndViolationsObj.LastUpdated = requestObj.DateTimeEnded.GetValueOrDefault();
@@ -287,7 +291,7 @@ namespace PropertyWebAPI.BAL
                                         {
                                             dobPenaltiesAndViolationsObj = new WebDataDB.DOBViolation();
                                             dobPenaltiesAndViolationsObj.BBL = parameters.BBL;
-                                            dobPenaltiesAndViolationsObj.DOBCivilPenalties = dobTotalPenaltyAmount; 
+                                            dobPenaltiesAndViolationsObj.DOBCivilPenalties = dobTotalPenaltyAmount;
                                             dobPenaltiesAndViolationsObj.ECBViolationAmount = dobTotalViolationAmount;
                                             dobPenaltiesAndViolationsObj.LastUpdated = requestObj.DateTimeEnded.GetValueOrDefault();
 
@@ -296,14 +300,14 @@ namespace PropertyWebAPI.BAL
 
                                         webDBEntities.SaveChanges();
 
-                                        logs=DAL.DataRequestLog.SetAsSuccess(webDBEntities, requestObj.RequestId);
+                                        logs = DAL.DataRequestLog.SetAsSuccess(webDBEntities, requestObj.RequestId);
                                     }
                                     else
                                         throw (new Exception("Cannot locate Request Log Record(s)"));
                                     break;
                                 }
                             default:
-                                Common.Logs.log().Warn(string.Format("Update called for a Request Object Id {0} with incorrect Status Id {1}",requestObj.RequestId,requestObj.RequestStatusTypeId));
+                                Common.Logs.log().Warn(string.Format("Update called for a Request Object Id {0} with incorrect Status Id {1}", requestObj.RequestId, requestObj.RequestStatusTypeId));
                                 break;
                         }
 

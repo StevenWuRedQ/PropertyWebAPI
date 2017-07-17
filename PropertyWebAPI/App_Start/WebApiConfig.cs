@@ -21,7 +21,7 @@ namespace PropertyWebAPI
 
             // Web API routes
             config.MapHttpAttributeRoutes();
-        
+
             // Configure APIKey Authentication Handler
             GlobalConfiguration.Configuration.MessageHandlers.Add(new APIKeySecurityHandler());
 

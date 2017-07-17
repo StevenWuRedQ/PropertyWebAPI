@@ -181,7 +181,9 @@
     <Content Include="Global.asax" />
     <Content Include="scripts\ai.0.22.19-build00125.js" />
     <Content Include="scripts\ai.0.22.19-build00125.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
@@ -229,6 +231,7 @@
     <Compile Include="BAL\Portal.cs" />
     <Compile Include="BAL\Property.cs" />
     <Compile Include="BAL\Results.cs" />
+    <Compile Include="Common\DateUtility.cs" />
     <Compile Include="Common\Statistics.cs" />
     <Compile Include="Controllers\CMAController.cs" />
     <Compile Include="Controllers\CourtsController.cs" />

@@ -121,26 +121,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="vwMortgageDeedMasters">
-      <EntityTypeMapping TypeName="ACRISModel.vwMortgageDeedMaster">
-        <MappingFragment StoreEntitySet="vwMortgageDeedMaster">
-          <ScalarProperty Name="UniqueKey" ColumnName="UniqueKey" />
-          <ScalarProperty Name="DateFileCreated" ColumnName="DateFileCreated" />
-          <ScalarProperty Name="CRFN" ColumnName="CRFN" />
-          <ScalarProperty Name="RecordedBorough" ColumnName="RecordedBorough" />
-          <ScalarProperty Name="DocumentTypeCode" ColumnName="DocumentTypeCode" />
-          <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
-          <ScalarProperty Name="DocumentAmount" ColumnName="DocumentAmount" />
-          <ScalarProperty Name="DateRecorded" ColumnName="DateRecorded" />
-          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-          <ScalarProperty Name="ReelYear" ColumnName="ReelYear" />
-          <ScalarProperty Name="ReelNumber" ColumnName="ReelNumber" />
-          <ScalarProperty Name="ReelPage" ColumnName="ReelPage" />
-          <ScalarProperty Name="PercentageOftransaction" ColumnName="PercentageOftransaction" />
-          <ScalarProperty Name="DateLastUpdated" ColumnName="DateLastUpdated" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <FunctionImportMapping FunctionName="ACRISModel.Store.tfnGetDocumentParties" FunctionImportName="tfnGetDocumentParties">
       <ResultMapping>
         <ComplexTypeMapping TypeName="ACRISModel.tfnGetDocumentParties_Result">
@@ -277,5 +257,39 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <EntitySetMapping Name="vwUpdateTrancations">
+      <EntityTypeMapping TypeName="ACRISModel.vwUpdateTrancation">
+        <MappingFragment StoreEntitySet="vwUpdateTrancation">
+          <ScalarProperty Name="TableName" ColumnName="TableName" />
+          <ScalarProperty Name="IdentifyingColumnName" ColumnName="IdentifyingColumnName" />
+          <ScalarProperty Name="DateTimeProcessed" ColumnName="DateTimeProcessed" />
+          <ScalarProperty Name="TransactionDateTime" ColumnName="TransactionDateTime" />
+          <ScalarProperty Name="IsUpdate" ColumnName="IsUpdate" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsInsert" ColumnName="IsInsert" />
+          <ScalarProperty Name="BBL" ColumnName="BBL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vwMortgageDeedMasters">
+      <EntityTypeMapping TypeName="ACRISModel.vwMortgageDeedMaster">
+        <MappingFragment StoreEntitySet="vwMortgageDeedMaster">
+          <ScalarProperty Name="DateLastUpdated" ColumnName="DateLastUpdated" />
+          <ScalarProperty Name="PercentageOftransaction" ColumnName="PercentageOftransaction" />
+          <ScalarProperty Name="ReelPage" ColumnName="ReelPage" />
+          <ScalarProperty Name="ReelNumber" ColumnName="ReelNumber" />
+          <ScalarProperty Name="ReelYear" ColumnName="ReelYear" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+          <ScalarProperty Name="DateRecorded" ColumnName="DateRecorded" />
+          <ScalarProperty Name="DocumentAmount" ColumnName="DocumentAmount" />
+          <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+          <ScalarProperty Name="DocumentTypeCode" ColumnName="DocumentTypeCode" />
+          <ScalarProperty Name="RecordedBorough" ColumnName="RecordedBorough" />
+          <ScalarProperty Name="CRFN" ColumnName="CRFN" />
+          <ScalarProperty Name="DateFileCreated" ColumnName="DateFileCreated" />
+          <ScalarProperty Name="UniqueKey" ColumnName="UniqueKey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

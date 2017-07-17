@@ -14,7 +14,7 @@ namespace PropertyWebAPI.BAL
     using ACRISDB;
     using AutoMapper;
 
-    public class DeedParty:tfnGetDocumentParties_Result
+    public class DeedParty : tfnGetDocumentParties_Result
     {
         //
     }
@@ -40,9 +40,9 @@ namespace PropertyWebAPI.BAL
         public List<DeedParty> owners;
     }
 
-    public class DocumentDetail: tfnGetDocuments_Result
+    public class DocumentDetail : tfnGetDocuments_Result
     {
-        
+
     }
 
     public class MortgageRelatedDocumentDetail
@@ -82,15 +82,34 @@ namespace PropertyWebAPI.BAL
 
     }
 
-    
+    /// <summary>
+    /// Record ACRIS update transactions
+    /// </summary>
+    public class PropertyUpdateTransaction
+    {
+        /// <summary>
+        /// List of property BBLE
+        /// </summary>
+        public List<string> Data { get; set; }
+
+        public DateTime Beginning { get; set; }
+        /// <summary>
+        /// Total count of properties
+        /// </summary>
+        public int Count { get; set; }
+        public DateTime End { get; set; }
+
+    }
 
     public class ACRIS
     {
+        
+
         public static List<DocumentDetail> GetDocuments(string propertyBBL)
         {
             using (ACRISEntities acrisDBEntities = new ACRISEntities())
             {
-                return Mapper.Map<List<tfnGetDocuments_Result>, List <DocumentDetail>>( acrisDBEntities.tfnGetDocuments(propertyBBL,null)
+                return Mapper.Map<List<tfnGetDocuments_Result>, List<DocumentDetail>>(acrisDBEntities.tfnGetDocuments(propertyBBL, null)
                                                                                                        .OrderByDescending(m => (m.DocumentDate != null) ? m.DocumentDate : m.DateRecorded)
                                                                                                        .ToList());
             }
@@ -98,11 +117,11 @@ namespace PropertyWebAPI.BAL
 
         public static List<DocumentDetail> GetDeeds(string propertyBBL)
         {
-           using (ACRISEntities acrisDBEntities = new ACRISEntities())
+            using (ACRISEntities acrisDBEntities = new ACRISEntities())
             {
                 return Mapper.Map<List<tfnGetDocuments_Result>, List<DocumentDetail>>(acrisDBEntities.tfnGetDocuments(propertyBBL, null)
                                                                                                      .Where(i => i.DocumentType == "DEED" || i.DocumentType == "DEEDO")
-                                                                                                     .OrderByDescending(m => (m.DocumentDate!=null)? m.DocumentDate : m.DateRecorded)
+                                                                                                     .OrderByDescending(m => (m.DocumentDate != null) ? m.DocumentDate : m.DateRecorded)
                                                                                                      .ToList());
             }
         }
@@ -111,9 +130,11 @@ namespace PropertyWebAPI.BAL
         {
             using (ACRISEntities acrisDBEntities = new ACRISEntities())
             {
-                var resultList = acrisDBEntities.tfnGetMortgageChain(propertyBBL).OrderByDescending(m => (m.DocumentDate != null) ? m.DocumentDate : m.DateRecorded)
-                                                                                 .ThenByDescending(m => (m.RelatedDocumentDate != null) ? m.RelatedDocumentDate : m.RelatedDocumentRecordDate)
-                                                                                 .ToList();
+                var resultList = acrisDBEntities
+                                 .tfnGetMortgageChain(propertyBBL)
+                                 .OrderByDescending(m => (m.DocumentDate != null) ? m.DocumentDate : m.DateRecorded)
+                                 .ThenByDescending(m => (m.RelatedDocumentDate != null) ? m.RelatedDocumentDate : m.RelatedDocumentRecordDate)
+                                 .ToList();
                 if (resultList == null || resultList.Count == 0)
                     return null;
 
@@ -122,7 +143,7 @@ namespace PropertyWebAPI.BAL
                 MortgageDocumentDetail mortgage = null;
                 foreach (var rec in resultList)
                 {
-                    if (documentKey!=rec.UniqueKey)
+                    if (documentKey != rec.UniqueKey)
                     {
                         documentKey = rec.UniqueKey;
 
@@ -131,9 +152,9 @@ namespace PropertyWebAPI.BAL
                         mortgage.Parties = Mapper.Map<List<tfnGetDocumentParties_Result>, List<DocumentParty>>(acrisDBEntities.tfnGetDocumentParties(rec.UniqueKey, null).ToList());
                         mortgageChain.Add(mortgage);
                     }
-                    if (rec.RelatedDocumentUniqueKey!=null)
+                    if (rec.RelatedDocumentUniqueKey != null)
                     {
-                        if (mortgage.RelatedDocuments==null)
+                        if (mortgage.RelatedDocuments == null)
                             mortgage.RelatedDocuments = new List<MortgageRelatedDocumentDetail>();
                         if (rec.RelatedDocumentType == "SAT")
                             mortgage.IsPaid = true;
@@ -161,7 +182,8 @@ namespace PropertyWebAPI.BAL
                     LatestDeedDocument documentObj = acrisDBEntities.LatestDeedDocuments.FirstOrDefault(i => i.BBLE == propertyBBLE);
 
                     if (documentObj == null)
-                    {   Common.Logs.log().Error(string.Format("Error finding record for BBLE {0} in LatestDeedDocument", propertyBBLE));
+                    {
+                        Common.Logs.log().Error(string.Format("Error finding record for BBLE {0} in LatestDeedDocument", propertyBBLE));
                         return null;
                     }
                     DeedDetails deedDetailsObj = new DeedDetails();
@@ -175,7 +197,7 @@ namespace PropertyWebAPI.BAL
                     return deedDetailsObj;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Common.Logs.log().Error(string.Format("Error reading AreaAbstract{0}", Common.Logs.FormatException(e)));
                 return null;
@@ -185,12 +207,14 @@ namespace PropertyWebAPI.BAL
         public static PropertyLotInformation GetLotInformation(string propertyBBLE)
         {
             try
-            {   using (ACRISEntities acrisDBEntities = new ACRISEntities())
+            {
+                using (ACRISEntities acrisDBEntities = new ACRISEntities())
                 {
                     PropertyNotInAssessment propertyLotInformationObj = acrisDBEntities.PropertyNotInAssessments.FirstOrDefault(i => i.BBL == propertyBBLE);
 
                     if (propertyLotInformationObj == null)
-                    {   Common.Logs.log().Error(string.Format("Error finding record for BBLE {0} in ACRIS", propertyBBLE));
+                    {
+                        Common.Logs.log().Error(string.Format("Error finding record for BBLE {0} in ACRIS", propertyBBLE));
                         return null;
                     }
                     return Mapper.Map<PropertyLotInformation>(propertyLotInformationObj);
@@ -202,5 +226,50 @@ namespace PropertyWebAPI.BAL
                 return null;
             }
         }
+        /// <summary>
+        /// Get all update ACRIS BBLE list in date range
+        /// </summary>
+        /// <param name="from">beginning date to get properties  </param>
+        /// <param name="to">End date property</param>
+        /// <returns>
+        /// List of BBLE and date range queried in data
+        /// </returns>
+        public static PropertyUpdateTransaction GetTransaction(DateTime from, DateTime? to = null)
+        {
+
+            try
+            {
+                using (ACRISEntities ctx = new ACRISEntities())
+                {
+                    var transactions = ctx.vwUpdateTrancations
+                                          .Where(t => t.DateTimeProcessed > from)
+                                          .Where(t => to != null ? t.DateTimeProcessed < to : true);
+                    if (transactions.Count() > 0)
+                    {
+                        List<string> bbles = transactions
+                                             .GroupBy(t => t.BBL)
+                                             .Select(g => g.Key)
+                                             .ToList();
+
+                        return new PropertyUpdateTransaction()
+                        {
+                            Data = bbles,
+                            Beginning = transactions.Min(t => t.DateTimeProcessed),
+                            Count = bbles.Count(),
+                            End = transactions.Max(t => t.DateTimeProcessed)
+                        };
+                    }
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                Common.Logs.log().Error(string.Format("Error reading AreaAbstract{0}", Common.Logs.FormatException(e)));
+                return null;
+            }
+        }
     }
 }
+
+
+

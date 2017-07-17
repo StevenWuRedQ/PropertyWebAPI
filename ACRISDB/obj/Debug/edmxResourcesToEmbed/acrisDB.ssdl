@@ -171,6 +171,27 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
     <Property Name="PercentageOftransaction" Type="numeric" Precision="15" Scale="6" />
     <Property Name="DateLastUpdated" Type="datetime" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'AreaAbstractNew.Acris.vwUpdateTrancation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vwUpdateTrancation">
+    <Key>
+      <PropertyRef Name="BBL" />
+      <PropertyRef Name="IsInsert" />
+      <PropertyRef Name="IsDelete" />
+      <PropertyRef Name="IsUpdate" />
+      <PropertyRef Name="DateTimeProcessed" />
+      <PropertyRef Name="IdentifyingColumnName" />
+      <PropertyRef Name="TableName" />
+    </Key>
+    <Property Name="BBL" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="IsInsert" Type="smallint" Nullable="false" />
+    <Property Name="IsDelete" Type="smallint" Nullable="false" />
+    <Property Name="IsUpdate" Type="smallint" Nullable="false" />
+    <Property Name="TransactionDateTime" Type="datetime" />
+    <Property Name="DateTimeProcessed" Type="datetime" Nullable="false" />
+    <Property Name="IdentifyingColumnName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="TableName" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
   <Function Name="tfnGetDocumentParties" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="Acris">
     <Parameter Name="UniqueKey" Type="varchar" Mode="In" />
     <Parameter Name="PartyType" Type="varchar" Mode="In" />
@@ -393,6 +414,18 @@ warning 6002: The table/view 'AreaAbstractNew.Acris.vwMortgageDeedMaster' does n
     [vwMortgageDeedMaster].[PercentageOftransaction] AS [PercentageOftransaction], 
     [vwMortgageDeedMaster].[DateLastUpdated] AS [DateLastUpdated]
     FROM [Acris].[vwMortgageDeedMaster] AS [vwMortgageDeedMaster]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="vwUpdateTrancation" EntityType="Self.vwUpdateTrancation" store:Type="Views" store:Schema="Acris">
+      <DefiningQuery>SELECT 
+    [vwUpdateTrancation].[BBL] AS [BBL], 
+    [vwUpdateTrancation].[IsInsert] AS [IsInsert], 
+    [vwUpdateTrancation].[IsDelete] AS [IsDelete], 
+    [vwUpdateTrancation].[IsUpdate] AS [IsUpdate], 
+    [vwUpdateTrancation].[TransactionDateTime] AS [TransactionDateTime], 
+    [vwUpdateTrancation].[DateTimeProcessed] AS [DateTimeProcessed], 
+    [vwUpdateTrancation].[IdentifyingColumnName] AS [IdentifyingColumnName], 
+    [vwUpdateTrancation].[TableName] AS [TableName]
+    FROM [Acris].[vwUpdateTrancation] AS [vwUpdateTrancation]</DefiningQuery>
     </EntitySet>
   </EntityContainer>
 </Schema>

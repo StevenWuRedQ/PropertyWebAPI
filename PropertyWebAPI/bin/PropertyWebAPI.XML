@@ -481,6 +481,31 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:PropertyWebAPI.BAL.PropertyUpdateTransaction">
+            <summary>
+            Record ACRIS update transactions
+            </summary>
+        </member>
+        <member name="P:PropertyWebAPI.BAL.PropertyUpdateTransaction.Data">
+            <summary>
+            List of property BBLE
+            </summary>
+        </member>
+        <member name="P:PropertyWebAPI.BAL.PropertyUpdateTransaction.Count">
+            <summary>
+            Total count of properties
+            </summary>
+        </member>
+        <member name="M:PropertyWebAPI.BAL.ACRIS.GetTransaction(System.DateTime,System.Nullable{System.DateTime})">
+            <summary>
+            Get all update ACRIS BBLE list in date range
+            </summary>
+            <param name="from">beginning date to get properties  </param>
+            <param name="to">End date property</param>
+            <returns>
+            List of BBLE and date range queried in data
+            </returns>
+        </member>
         <member name="T:PropertyWebAPI.BAL.BaseResult">
             <summary>
             Use the class to extend any result that needs to be send asynchronously
@@ -1723,6 +1748,14 @@
             For more details refer to the documentation for each filter.
             </summary>  
             <param name="scenarioObj"></param>
+        </member>
+        <member name="M:PropertyWebAPI.Controllers.LeadsController.GetAcrisUpdateTransactions(System.String,System.String)">
+            <summary>
+            Get ACRIS update transaction in a range of date
+            </summary>
+            <param name="fromAsDate">Range beginning must provide to be format in yyyMMdd such as 20170101</param>
+            <param name="toAsDate">Optional Range end date format in yyyMMdd such as 20170101</param>
+            <returns></returns>
         </member>
         <member name="M:PropertyWebAPI.Controllers.LiensController.GetPropertyLead(System.String)">
             <summary>  

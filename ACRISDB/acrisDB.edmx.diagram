@@ -11,8 +11,9 @@
         <EntityTypeShape EntityType="ACRISModel.vwDocumentPartiesByBBLE" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ACRISModel.vwDocumentPartiesByUniqueKey" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ACRISModel.vwDocumentsByBBLE" Width="1.5" PointX="4.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ACRISModel.vwMortgageDeedMaster" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ACRISModel.PropertyNotInAssessment" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ACRISModel.vwUpdateTrancation" Width="1.5" PointX="7.375" PointY="5.75" />
+        <EntityTypeShape EntityType="ACRISModel.vwMortgageDeedMaster" Width="1.5" PointX="7.125" PointY="1.125" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

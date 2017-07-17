@@ -8,6 +8,8 @@
     using System.Web.Http.Description;
     using AutoMapper;
     using Newtonsoft.Json;
+    using BAL;
+    using Common;
 
     public class Scenario
     {
@@ -22,7 +24,7 @@
         public Filters filterdata;
     }
 
-     public class Filters
+    public class Filters
     {
         /// <summary>Optional parameter. Multiple values can be sent. No wildcards.</summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -90,7 +92,7 @@
     public class LeadsController : ApiController
     {
 
-       
+
 
         /// <summary>Use this api to get a lead details</summary>  
         /// <param name="propertybbl">Borough Block Lot Number. The first character is a number 1-5 followed by 0 padded 5 digit block number followed by 0 padded 4 digit lot number</param>  
@@ -105,7 +107,7 @@
             try
             {
                 var lead = BAL.Lead.GetPropertyLead(propertybbl);
-                    
+
                 if (lead == null)
                     return NotFound();
 
@@ -149,10 +151,10 @@
         public IHttpActionResult GetLeads(string zipcodes = null, string neighborhoods = null, string isvacant = null, string leadgrades = null,
                                           string buildingclasscodes = null, string counties = null, string ismailingaddressactive = null,
                                           string lientypes = null, string ltv = null, string equity = null, string violations = null,
-                                          string cities = null, string states = null, string hasfannie = null, string hasfreddie = null, 
-                                          string unbuilt = null, string servicer=null, string landmark = null, string hasFHA = null)
+                                          string cities = null, string states = null, string hasfannie = null, string hasfreddie = null,
+                                          string unbuilt = null, string servicer = null, string landmark = null, string hasFHA = null)
         {
-            if (!BAL.Lead.IsValidFilter(zipcodes, neighborhoods, isvacant, leadgrades, buildingclasscodes, counties, ismailingaddressactive, 
+            if (!BAL.Lead.IsValidFilter(zipcodes, neighborhoods, isvacant, leadgrades, buildingclasscodes, counties, ismailingaddressactive,
                                        lientypes, ltv, equity, violations, cities, states, hasfannie, hasfreddie, unbuilt, servicer, landmark, hasFHA))
                 return BadRequest("At least one filter is required");
 
@@ -162,8 +164,8 @@
                                                          lientypes, ltv, equity, violations, cities, states, hasfannie, hasfreddie, unbuilt, servicer, landmark,
                                                          hasFHA).ToList();
                 if (leadList == null || leadList.Count == 0)
-                        return NotFound();
-                    return Ok(leadList);
+                    return NotFound();
+                return Ok(leadList);
             }
             catch (Exception e)
             {
@@ -208,7 +210,7 @@
         {
             if (!BAL.Lead.IsValidFilter(filterdata.zipcodes, filterdata.neighborhoods, filterdata.isvacant, filterdata.leadgrades, filterdata.buildingclasscodes,
                                         filterdata.counties, filterdata.ismailingaddressactive, filterdata.lientypes, filterdata.ltv, filterdata.equity, filterdata.violations,
-                                        filterdata.cities, filterdata.states, filterdata.hasFannie, filterdata.hasFreddie, filterdata.unbuilt, filterdata.servicer, 
+                                        filterdata.cities, filterdata.states, filterdata.hasFannie, filterdata.hasFreddie, filterdata.unbuilt, filterdata.servicer,
                                         filterdata.landmark, filterdata.hasFHA))
                 return BadRequest("At least one filter is required");
 
@@ -216,7 +218,7 @@
             {
                 var leadList = DAL.Lead.GetPropertyLeads(filterdata.zipcodes, filterdata.neighborhoods, filterdata.isvacant, filterdata.leadgrades, filterdata.buildingclasscodes,
                                                          filterdata.counties, filterdata.ismailingaddressactive, filterdata.lientypes, filterdata.ltv, filterdata.equity, filterdata.violations,
-                                                         filterdata.cities, filterdata.states, filterdata.hasFannie, filterdata.hasFreddie, filterdata.unbuilt, filterdata.servicer, 
+                                                         filterdata.cities, filterdata.states, filterdata.hasFannie, filterdata.hasFreddie, filterdata.unbuilt, filterdata.servicer,
                                                          filterdata.landmark, filterdata.hasFHA).ToList();
                 if (leadList == null || leadList.Count == 0)
                     return NotFound();
@@ -240,12 +242,12 @@
         [HttpPost]
         public IHttpActionResult SaveScenario([FromBody] Scenario scenarioObj)
         {
-            if (scenarioObj == null || scenarioObj.filterdata==null)
+            if (scenarioObj == null || scenarioObj.filterdata == null)
                 return BadRequest("No data found or data request is malformed");
 
-            if (!BAL.Lead.IsValidFilter(scenarioObj.filterdata.zipcodes, scenarioObj.filterdata.neighborhoods, scenarioObj.filterdata.isvacant, scenarioObj.filterdata.leadgrades, scenarioObj.filterdata.buildingclasscodes, 
-                                        scenarioObj.filterdata.counties, scenarioObj.filterdata.ismailingaddressactive, scenarioObj.filterdata.lientypes, scenarioObj.filterdata.ltv, scenarioObj.filterdata.equity, 
-                                        scenarioObj.filterdata.violations, scenarioObj.filterdata.cities, scenarioObj.filterdata.states, scenarioObj.filterdata.hasFannie, scenarioObj.filterdata.hasFreddie, scenarioObj.filterdata.unbuilt, 
+            if (!BAL.Lead.IsValidFilter(scenarioObj.filterdata.zipcodes, scenarioObj.filterdata.neighborhoods, scenarioObj.filterdata.isvacant, scenarioObj.filterdata.leadgrades, scenarioObj.filterdata.buildingclasscodes,
+                                        scenarioObj.filterdata.counties, scenarioObj.filterdata.ismailingaddressactive, scenarioObj.filterdata.lientypes, scenarioObj.filterdata.ltv, scenarioObj.filterdata.equity,
+                                        scenarioObj.filterdata.violations, scenarioObj.filterdata.cities, scenarioObj.filterdata.states, scenarioObj.filterdata.hasFannie, scenarioObj.filterdata.hasFreddie, scenarioObj.filterdata.unbuilt,
                                         scenarioObj.filterdata.servicer, scenarioObj.filterdata.landmark, scenarioObj.filterdata.hasFHA))
                 return BadRequest("At least one filter is required");
 
@@ -254,7 +256,7 @@
 
             try
             {
-                
+
                 return Ok(DAL.Lead.SaveScenario(scenarioObj.username, scenarioObj.scenarioname, scenarioObj.description, scenarioObj.filterdata.zipcodes, scenarioObj.filterdata.neighborhoods,
                                                 scenarioObj.filterdata.isvacant, scenarioObj.filterdata.leadgrades, scenarioObj.filterdata.buildingclasscodes, scenarioObj.filterdata.counties, scenarioObj.filterdata.ismailingaddressactive,
                                                 scenarioObj.filterdata.lientypes, scenarioObj.filterdata.ltv, scenarioObj.filterdata.equity, scenarioObj.filterdata.violations, scenarioObj.filterdata.cities, scenarioObj.filterdata.states,
@@ -267,6 +269,43 @@
                 return Common.HttpResponse.InternalError(Request, "Internal Error in processing request");
             }
         }
-       
+        /// <summary>
+        /// Get ACRIS update transaction in a range of date
+        /// </summary>
+        /// <param name="fromAsDate">Range beginning must provide to be format in yyyMMdd such as 20170101</param>
+        /// <param name="toAsDate">Optional Range end date format in yyyMMdd such as 20170101</param>
+        /// <returns></returns>
+        [Route("api/leads/acris/transaction")]
+        [ResponseType(typeof(PropertyUpdateTransaction))]
+        [HttpGet]
+        public IHttpActionResult GetAcrisUpdateTransactions(string fromAsDate, string toAsDate = "")
+        {
+            DateTime from;
+            DateTime to = DateTime.Now;
+            if (!DateUtility.ParseDateTime(fromAsDate, out from))
+                return BadRequest("from date is not valid!");
+
+            if (!String.IsNullOrEmpty(toAsDate))
+                DateUtility.ParseDateTime(toAsDate.ToString(), out to);
+
+            try
+            {
+                PropertyUpdateTransaction transaction = BAL.ACRIS.GetTransaction(from, to);
+                if (transaction == null)
+                {
+                    return NotFound();
+                }
+                return Ok(transaction);
+            }
+            catch (Exception e)
+            {
+                Common.Logs.log().Error(string.Format("Exception encountered while get ACRIS update transaction{0}", Common.Logs.FormatException(e)));
+                return Common.HttpResponse.InternalError(Request, "Internal Error in processing request");
+            }
+
+        }
+
+
+
     }
 }
