@@ -231,6 +231,7 @@
     <Compile Include="BAL\Portal.cs" />
     <Compile Include="BAL\Property.cs" />
     <Compile Include="BAL\Results.cs" />
+    <Compile Include="BAL\Serivces\ACRISService.cs" />
     <Compile Include="Common\DateUtility.cs" />
     <Compile Include="Common\Statistics.cs" />
     <Compile Include="Controllers\CMAController.cs" />

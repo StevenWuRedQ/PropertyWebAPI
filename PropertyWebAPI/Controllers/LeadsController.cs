@@ -290,6 +290,7 @@
 
             try
             {
+                
                 PropertyUpdateTransaction transaction = BAL.ACRIS.GetTransaction(from, to);
                 if (transaction == null)
                 {

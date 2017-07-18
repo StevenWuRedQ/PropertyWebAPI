@@ -241,25 +241,8 @@ namespace PropertyWebAPI.BAL
             {
                 using (ACRISEntities ctx = new ACRISEntities())
                 {
-                    var transactions = ctx.vwUpdateTrancations
-                                          .Where(t => t.DateTimeProcessed > from)
-                                          .Where(t => to != null ? t.DateTimeProcessed < to : true);
-                    if (transactions.Count() > 0)
-                    {
-                        List<string> bbles = transactions
-                                             .GroupBy(t => t.BBL)
-                                             .Select(g => g.Key)
-                                             .ToList();
-
-                        return new PropertyUpdateTransaction()
-                        {
-                            Data = bbles,
-                            Beginning = transactions.Min(t => t.DateTimeProcessed),
-                            Count = bbles.Count(),
-                            End = transactions.Max(t => t.DateTimeProcessed)
-                        };
-                    }
-                    return null;
+                    var service = new Serivces.ACRISService(ctx);
+                    return service.GetTransaction(from, to);
                 }
             }
             catch (Exception e)

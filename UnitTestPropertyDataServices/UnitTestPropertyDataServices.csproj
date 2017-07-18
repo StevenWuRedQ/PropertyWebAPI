@@ -78,6 +78,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AcrisUpdateUnitTest.cs" />
+    <Compile Include="DBSetup\ACRISDBTestContext.cs" />
     <Compile Include="EffortProviderFactory.cs" />
     <Compile Include="IntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
